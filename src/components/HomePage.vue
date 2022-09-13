@@ -1,15 +1,15 @@
 <template>
     <div class="wrapper">
-        <LiftComponent :height='5' :currentFloor='4'/>
+        <LiftGroup/>
     </div>
 </template>
 
 <script>
-import LiftComponent from './LiftComponent.vue';
+import LiftGroup from './LiftGroupComponent.vue';
 export default {
     name: "HomePage",
     data: () => ({}),
-    components: { LiftComponent }
+    components: { LiftGroup }
 }
 </script>
 
