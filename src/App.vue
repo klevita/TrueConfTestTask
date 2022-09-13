@@ -1,25 +1,28 @@
 <template>
-  <HomePage />
+    <HomePage />
 </template>
 
 <script>
 import HomePage from './components/HomePage.vue'
 
 export default {
-  name: 'App',
-  components: {
-    HomePage//lifts)
-  }
+    name: 'App',
+    components: {
+        HomePage//lifts)
+    }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+}
+
+body {
+    margin: 0q;
 }
 </style>

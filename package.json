@@ -7,10 +7,15 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@quasar/extras": "^1.15.3",
+    "gsap": "^3.11.1",
+    "quasar": "^2.7.7",
     "vue": "^3.2.13"
   },
   "devDependencies": {
-    "@vue/cli-service": "~5.0.0"
+    "@vue/cli-service": "~5.0.0",
+    "sass": "^1.32.12",
+    "sass-loader": "^13.0.2"
   },
   "browserslist": [
     "> 1%",
