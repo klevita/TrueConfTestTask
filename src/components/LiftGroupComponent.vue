@@ -15,12 +15,12 @@
                 <div style="height:1px;background-color:black"> </div>
             </div>
             <div class="lifts">
-                <LiftComponent v-for="n in Lifts" @ready="invokeLifts()" ref="lft" :Height='Height' :id="n-1"
+                <LiftComponent v-for="n in Lifts" @arrival="checkButtons()" @ready="invokeLifts()" ref="lft" :Height='Height' :id="n-1"
                     :currentFloor='liftCalls[n-1]' />
             </div>
             <div class="buttons">
-                <button class="button" @click="callHandler(-(-Height + h)+1)" v-for="h in Height"
-                    :id="'button-'+h"></button>
+                <button class="button" :style="buttonColors[-(-Height + h)+1 ]" @click="callHandler(-(-Height + h)+1);"
+                    v-for="h in Height"></button>
             </div>
         </div>
     </div>
@@ -32,16 +32,33 @@ export default {
     name: "LiftGroup",
     data: () => ({
         Height: 5,
+        lastLifts: 2,
         Lifts: 2,
         liftCalls: [],
-        liftQueue: []
+        liftQueue: [],
+        buttonColors: []
     }),
     components: { LiftComponent },
     methods: {
+        checkButtons() {
+            this.buttonColors = []
+            for (let n = 0; n < this.Lifts; n++) {
+                this.buttonColors[this.$refs.lft[n].currentFloor] = {backgroundColor:'red'}
+            }
+            this.liftQueue.forEach((l)=>{
+                this.buttonColors[l] = {backgroundColor:'red'}
+            })
+        },
         invokeLifts() {
+            let minRange = 99999
             if (this.liftQueue.length) {
                 for (let n = 0; n < this.Lifts; n++) {
-                    if (!this.$refs.lft[n].isDisabled) {
+                    if (!this.$refs.lft[n].isDisabled && Math.abs(this.$refs.lft[n].currentFloor - this.liftQueue[this.liftQueue.length - 1]) < minRange) {
+                        minRange = Math.abs(this.$refs.lft[n].currentFloor - this.liftQueue[this.liftQueue.length - 1])
+                    }
+                }
+                for (let n = 0; n < this.Lifts; n++) {
+                    if (!this.$refs.lft[n].isDisabled && Math.abs(this.$refs.lft[n].currentFloor - this.liftQueue[this.liftQueue.length - 1]) === minRange) {
                         this.liftCalls[n] = this.liftQueue[this.liftQueue.length - 1]
                         this.liftQueue.pop()
                         break
@@ -55,12 +72,16 @@ export default {
                     return
                 }
             }
-            if(!~this.liftQueue.indexOf(floor)){
+            if (!~this.liftQueue.indexOf(floor)) {
                 this.liftQueue.push(floor)
             }
             this.invokeLifts()
+            this.checkButtons()
         }
 
+    },
+    mounted(){
+        this.checkButtons()
     },
     watch: {
         Height() {
@@ -76,9 +97,12 @@ export default {
             } else {
                 this.Lifts = parseInt(this.Lifts) >= 1 ? parseInt(this.Lifts) : -parseInt(this.Lifts);
             }
-            for (let n = 0; n < this.Lifts; n++) {
-                    this.liftCalls[n] = this.liftQueue[this.liftQueue.length - 1]
+            if (this.lastLifts > this.Lifts) {
+                for (let n = this.Lifts; n < this.lastLifts; n++) {
+                    this.liftCalls[n] = this.Height
                 }
+            }
+            this.lastLifts = this.Lifts
         },
     }
 }
@@ -120,12 +144,20 @@ export default {
         width: 40px;
 
         .button {
+            border-radius: 2px;
             width: 20px;
-
+            position: relative;
+            box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.8);
             height: 20px;
             background-color: green;
             border: none;
             padding: 0;
+
+            &:active {
+                box-shadow: none;
+                right: -2px;
+                top: 2px;
+            }
         }
     }
 }
