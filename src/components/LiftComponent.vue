@@ -8,7 +8,8 @@
 
 <script>
 export default {
-    name: 'HomePage',
+    name: 'Lift',
+    emits: ['ready'],
     data: () => ({
         isDisabled: false,
         lastFloor: NaN
@@ -38,6 +39,7 @@ export default {
                 this.isDisabled = true;
                 setTimeout(() => {
                     this.isDisabled = false;
+                    this.$emit('ready')
                 }, Math.abs(this.lastFloor - this.currentFloor)*1000);
                 const el = this.$refs['lift-' + this.id]
                 el.style.transition = "top " + Math.abs(this.lastFloor - this.currentFloor) + "s"  
