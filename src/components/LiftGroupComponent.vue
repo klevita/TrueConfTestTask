@@ -34,23 +34,23 @@ export default {
         Height: 5,
         lastLifts: 2,
         Lifts: 2,
-        liftCalls: [1],
+        liftCalls: [1, 1],
         liftQueue: [],
         buttonColors: []
     }),
     components: { LiftComponent },
     methods: {
         checkButtons() {
-                this.buttonColors = []
-                // for (let n = 0; n < this.Lifts; n++) {
-                //     this.buttonColors[this.$refs.lft[n].currentFloor] = { backgroundColor: 'red' }
-                // }
-                this.liftCalls.forEach((l) => {
-                    this.buttonColors[l] = { backgroundColor: 'red' }
-                })
-                this.liftQueue.forEach((l) => {
-                    this.buttonColors[l] = { backgroundColor: 'red' }
-                })
+            this.buttonColors = []
+            // for (let n = 0; n < this.Lifts; n++) {
+            //     this.buttonColors[this.$refs.lft[n].currentFloor] = { backgroundColor: 'red' }
+            // }
+            this.liftCalls.forEach((l) => {
+                this.buttonColors[l] = { backgroundColor: 'red' }
+            })
+            this.liftQueue.forEach((l) => {
+                this.buttonColors[l] = { backgroundColor: 'red' }
+            })
 
         },
         invokeLifts() {
@@ -95,6 +95,11 @@ export default {
             } else {
                 this.Height = parseInt(this.Height) >= 1 ? parseInt(this.Height) : -parseInt(this.Height);
             }
+            for (let n = 0; n < this.Lifts; n++) {
+                this.liftCalls[n] = 1
+            }
+            this.liftQueue = []
+            this.checkButtons()
         },
         Lifts() {
             if (this.Lifts === '' || isNaN(this.Lifts)) {
@@ -102,13 +107,13 @@ export default {
             } else {
                 this.Lifts = parseInt(this.Lifts) >= 1 ? parseInt(this.Lifts) : -parseInt(this.Lifts);
             }
-            this.checkButtons()
-            if (this.lastLifts > this.Lifts) {
-                for (let n = this.Lifts; n < this.lastLifts; n++) {
-                    this.liftCalls[n] = 1
-                }
+            for (let n = 0; n < this.lastLifts; n+=1) {
+                this.liftCalls[n] = 1
+                this.$refs.lft[n].reset()
             }
-            this.lastLifts = this.Lifts
+            this.liftQueue = []
+            this.checkButtons()
+            this.lastLifts = this.lifts
         },
     }
 }

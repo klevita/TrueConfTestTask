@@ -19,7 +19,7 @@
 import gsap from 'gsap'
 export default {
     name: 'Lift',
-    emits: ['ready','arrival'],
+    emits: ['ready', 'arrival'],
     data: () => ({
         isDisabled: false,
         lastFloor: NaN
@@ -42,6 +42,13 @@ export default {
     mounted() {
         this.lastFloor = this.currentFloor
         this.$refs['lift-' + this.id].style.top = (this.Height - 1) * 100 + 'px'
+    },
+    methods: {
+        reset() {
+            this.$refs['lift-' + this.id].style.transition = "none"
+            this.lastFloor = this.currentFloor
+            this.$refs['lift-' + this.id].style.top = (this.Height - 1) * 100 + 'px'
+        }
     },
     watch: {
         currentFloor() {
