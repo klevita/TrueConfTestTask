@@ -42,9 +42,6 @@ export default {
     methods: {
         checkButtons() {
             this.buttonColors = []
-            // for (let n = 0; n < this.Lifts; n++) {
-            //     this.buttonColors[this.$refs.lft[n].currentFloor] = { backgroundColor: 'red' }
-            // }
             this.liftCalls.forEach((l) => {
                 this.buttonColors[l] = { backgroundColor: 'red' }
             })
