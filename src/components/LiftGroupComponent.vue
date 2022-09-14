@@ -15,8 +15,8 @@
                 <div style="height:1px;background-color:black"> </div>
             </div>
             <div class="lifts">
-                <LiftComponent v-for="n in Lifts" @arrival="checkButtons()" @ready="invokeLifts()" ref="lft" :Height='Height' :id="n-1"
-                    :currentFloor='liftCalls[n-1]' />
+                <LiftComponent v-for="n in Lifts" @arrival="checkButtons()" @ready="invokeLifts()" ref="lft"
+                    :Height='Height' :id="n-1" :currentFloor='liftCalls[n-1]' />
             </div>
             <div class="buttons">
                 <button class="button" :style="buttonColors[-(-Height + h)+1 ]" @click="callHandler(-(-Height + h)+1);"
@@ -34,20 +34,24 @@ export default {
         Height: 5,
         lastLifts: 2,
         Lifts: 2,
-        liftCalls: [],
+        liftCalls: [1],
         liftQueue: [],
         buttonColors: []
     }),
     components: { LiftComponent },
     methods: {
         checkButtons() {
-            this.buttonColors = []
-            for (let n = 0; n < this.Lifts; n++) {
-                this.buttonColors[this.$refs.lft[n].currentFloor] = {backgroundColor:'red'}
-            }
-            this.liftQueue.forEach((l)=>{
-                this.buttonColors[l] = {backgroundColor:'red'}
-            })
+                this.buttonColors = []
+                // for (let n = 0; n < this.Lifts; n++) {
+                //     this.buttonColors[this.$refs.lft[n].currentFloor] = { backgroundColor: 'red' }
+                // }
+                this.liftCalls.forEach((l) => {
+                    this.buttonColors[l] = { backgroundColor: 'red' }
+                })
+                this.liftQueue.forEach((l) => {
+                    this.buttonColors[l] = { backgroundColor: 'red' }
+                })
+
         },
         invokeLifts() {
             let minRange = 99999
@@ -64,7 +68,9 @@ export default {
                         break
                     }
                 }
+
             }
+            this.checkButtons()
         },
         callHandler(floor) {
             for (let n = 0; n < this.Lifts; n++) {
@@ -76,11 +82,10 @@ export default {
                 this.liftQueue.push(floor)
             }
             this.invokeLifts()
-            this.checkButtons()
         }
 
     },
-    mounted(){
+    mounted() {
         this.checkButtons()
     },
     watch: {
@@ -97,9 +102,10 @@ export default {
             } else {
                 this.Lifts = parseInt(this.Lifts) >= 1 ? parseInt(this.Lifts) : -parseInt(this.Lifts);
             }
+            this.checkButtons()
             if (this.lastLifts > this.Lifts) {
                 for (let n = this.Lifts; n < this.lastLifts; n++) {
-                    this.liftCalls[n] = this.Height
+                    this.liftCalls[n] = 1
                 }
             }
             this.lastLifts = this.Lifts
